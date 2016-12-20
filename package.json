@@ -1,0 +1,20 @@
+{
+  "name": "vote-app",
+  "version": "1.0.0",
+  "description": "voting fullstack project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yzhbankov/vote-app.git"
+  },
+  "author": "yzhbankov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yzhbankov/vote-app/issues"
+  },
+  "homepage": "https://github.com/yzhbankov/vote-app#readme"
+}
