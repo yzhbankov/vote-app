@@ -1,0 +1,27 @@
+body {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.board {
+    margin-top: 60px;
+    height: 300px;
+    background-color: #007bb6;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 50px;
+    color: white;
+}
+
+.title {
+    font-size: 100px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    padding-top: 40px;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+}
