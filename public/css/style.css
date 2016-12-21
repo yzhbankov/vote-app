@@ -25,3 +25,16 @@ body {
     position: absolute;
     bottom: 0;
 }
+
+.signup {
+    margin-top: 50px;
+    text-align: center;
+    width:600px
+}
+.signup button{
+    width:400px
+}
+
+.signup-title {
+    text-align: center;
+}

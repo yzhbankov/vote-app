@@ -1,0 +1,22 @@
+//
+   Created by Владелец on 21.12.2016.
+
+doctype html
+extends ./index.jade
+block append content
+   div.container.signup
+      h2.signup-title Change your password
+      form
+         div.form-group
+            label(for="user") User name:
+            input(type="user").form-control#user
+         div.form-group
+            label(for="pwd") Current password:
+            input(type="password").form-control#pwd
+         div.form-group
+            label(for="pwd") New password:
+            input(type="password").form-control#pwd
+         div.form-group
+            label(for="pwd") New password:
+            input(type="password").form-control#pwd
+         button.btn.btn-default(type="submit") Submit
