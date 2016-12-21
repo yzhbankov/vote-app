@@ -85,12 +85,12 @@ app.post('/settings', function (req, res) {
         MongoClient.connect(url, function (err, db) {
             db.collection('users').update({"username": username, "password": curPassword},
                 {"$set": {"password": password1}}, function (err, doc) {
-                    console.log("password was modified");
+                    res.redirect('/');
                     db.close();
                 });
         });
     } else {
-        console.log("new passwords not equal")
+        res.redirect('/settings');
     }
 });
 
