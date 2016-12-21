@@ -108,6 +108,58 @@ app.get('/dashboard', function (req, res) {
     }
 });
 
+app.get('/dashboard/newpoll', function (req, res) {
+    res.render('newpoll.jade', {});
+});
+
+
+app.post('/dashboard/newpoll', function (req, res) {
+    var pollname = req.body.pollname;
+    var option_1 = req.body.option_1;
+    var option_2 = req.body.option_2;
+    var username = req.session.user;
+
+    MongoClient.connect(url, function (err, db) {
+        db.collection('polls').findOne({"pollname": pollname}, function (err, item) {
+            if (item) {
+                db.close();
+                console.log("poll already exist");
+                res.redirect('/dashboard');
+            } else {
+                db.collection('polls').insertOne({
+                    "username": username,
+                    "pollname": pollname,
+                    "options": {
+                        option_1: {name: option_1, size: 0},
+                        option_2: {name: option_2, size: 0}
+                    }
+
+                }, function (err, result) {
+                    if (!err) {
+                        console.log("poll added successfuly");
+                    }
+                });
+                db.close();
+                res.redirect('/dashboard');
+            }
+        });
+    });
+});
+
+app.get('/dashboard/polls', function (req, res) {
+    MongoClient.connect(url, function (err, db) {
+        var resent = db.collection('polls').find({}, {
+            'username': true,
+            "pollname": true,
+            'options': true
+        }).sort({_id: -1}).toArray(function (err, result) {
+            res.send(result);
+        });
+
+        db.close();
+    });
+});
+
 app.get('/logout', function (req, res) {
     req.session.destroy();
     console.log("session ends");

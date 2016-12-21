@@ -1,0 +1,22 @@
+//
+   Created by Владелец on 21.12.2016.
+
+doctype html
+extends ./index.jade
+block append content
+    div.container.signup
+        h2 CREATE NEW POLL
+        form(action="/dashboard/newpoll" method="POST")
+            div.form-group
+                label(for="pollname") Poll Name:
+                input(type="text" name="pollname").form-control#user
+            div.form-group
+                label(for="opt") Option_1:
+                input(type="text" name='option_1').form-control#pwd
+            div.form-group
+                label(for="opt") Option_2:
+                input(type="text" name='option_2').form-control#pwd
+            div
+                button.btn.btn-default Add option
+
+            button.btn.btn-default(type="submit") Create Poll
