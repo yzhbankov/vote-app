@@ -6,7 +6,7 @@ var app = express();
 var bodyParser = require('body-parser');
 var MongoClient = require('mongodb').MongoClient;
 
-var url = 'mongodb://localhost:27017/users';
+var url = 'mongodb://localhost:27017/vote_up';
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: false}));
@@ -54,7 +54,22 @@ app.get('/signin', function (req, res) {
 });
 
 app.post('/signin', function (req, res) {
-    res.send(req.body);
+    var username = req.body.user;
+    var password = req.body.password;
+
+    MongoClient.connect(url, function (err, db) {
+        db.collection('users').findOne({"username": username, "password": password}, function (err, item) {
+            if (item) {
+                db.close();
+                console.log("user existing");
+                res.redirect('/');
+            } else {
+                db.close();
+                console.log("password or username is invalid");
+                res.redirect('/signin');
+            }
+        });
+    });
 });
 
 app.get('/settings', function (req, res) {
