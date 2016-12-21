@@ -5,11 +5,13 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var MongoClient = require('mongodb').MongoClient;
-
 var url = 'mongodb://localhost:27017/vote_up';
+var session = require('express-session');
+
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(session({secret: "secretword", resave: false, saveUninitialized: true}));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
@@ -33,6 +35,7 @@ app.post('/signup', function (req, res) {
                 console.log("user already exist");
                 res.redirect('/signup');
             } else {
+                req.session.user = username;
                 db.collection('users').insertOne({
                     "username": username,
                     "email": email,
@@ -43,7 +46,7 @@ app.post('/signup', function (req, res) {
                     }
                 });
                 db.close();
-                res.redirect('/');
+                res.redirect('/dashboard');
             }
         });
     });
@@ -60,9 +63,10 @@ app.post('/signin', function (req, res) {
     MongoClient.connect(url, function (err, db) {
         db.collection('users').findOne({"username": username, "password": password}, function (err, item) {
             if (item) {
+                req.session.user = username;
                 db.close();
                 console.log("user existing");
-                res.redirect('/');
+                res.redirect('/dashboard');
             } else {
                 db.close();
                 console.log("password or username is invalid");
@@ -92,6 +96,22 @@ app.post('/settings', function (req, res) {
     } else {
         res.redirect('/settings');
     }
+});
+
+app.get('/dashboard', function (req, res) {
+    if (!req.session.user) {
+        res.redirect("/");
+        console.log("no such session")
+    } else {
+        console.log("current session");
+        res.render('dashboard.jade', {});
+    }
+});
+
+app.get('/logout', function (req, res) {
+    req.session.destroy();
+    console.log("session ends");
+    res.redirect('/');
 });
 
 app.listen(process.env.PORT || 3000, function () {
