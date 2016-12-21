@@ -4,15 +4,16 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+var MongoClient = require('mongodb').MongoClient;
 
+var url = 'mongodb://localhost:27017/users';
 
 app.use(express.static('public'));
-app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.urlencoded({extended: false}));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
 app.get('/', function (req, res) {
-    //res.sendFile(__dirname + '/public');
     res.render('index.jade', {});
 });
 
@@ -21,7 +22,31 @@ app.get('/signup', function (req, res) {
 });
 
 app.post('/signup', function (req, res) {
-    res.send(req.body);
+    var username = req.body.user;
+    var email = req.body.email;
+    var password = req.body.password;
+
+    MongoClient.connect(url, function (err, db) {
+        db.collection('users').findOne({"username": username}, function (err, item) {
+            if (item) {
+                db.close();
+                console.log("user already exist");
+                res.redirect('/signup');
+            } else {
+                db.collection('users').insertOne({
+                    "username": username,
+                    "email": email,
+                    "password": password
+                }, function (err, result) {
+                    if (!err) {
+                        console.log("user added successfuly");
+                    }
+                });
+                db.close();
+                res.redirect('/');
+            }
+        });
+    });
 });
 
 app.get('/signin', function (req, res) {
