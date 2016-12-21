@@ -76,6 +76,24 @@ app.get('/settings', function (req, res) {
     res.render('settings.jade', {});
 });
 
+app.post('/settings', function (req, res) {
+    var username = req.body.user;
+    var curPassword = req.body.currentPassword;
+    var password1 = req.body.newPassword1;
+    var password2 = req.body.newPassword2;
+    if (password1 === password2) {
+        MongoClient.connect(url, function (err, db) {
+            db.collection('users').update({"username": username, "password": curPassword},
+                {"$set": {"password": password1}}, function (err, doc) {
+                    console.log("password was modified");
+                    db.close();
+                });
+        });
+    } else {
+        console.log("new passwords not equal")
+    }
+});
+
 app.listen(process.env.PORT || 3000, function () {
     console.log('Server start. Listening on port 3000')
 });
