@@ -11,6 +11,7 @@ var session = require('express-session');
 
 app.use("/", express.static('public'));
 app.use("/dashboard", express.static('public'));
+app.use("/poll", express.static('public'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(session({secret: "secretword", resave: false, saveUninitialized: true}));
 app.set('views', __dirname + '/views');
@@ -113,6 +114,32 @@ app.get('/dashboard/newpoll', function (req, res) {
     res.render('newpoll.jade', {scripts: ['js/addOption.js']});
 });
 
+app.get('/poll/:pollname', function (req, res) {
+    MongoClient.connect(url, function (err, db) {
+        console.log('db opened');
+        db.collection('polls').findOne({"pollname": req.params.pollname}, function (err, item) {
+            if (item) {
+                console.log('find');
+                console.log(req.params.pollname);
+                var username = item.username;
+                var pollname = item.pollname;
+                var options = item.options;
+                db.close();
+                res.render('poll.jade', {
+                    title: req.params.pollname,
+                    username: username,
+                    options: JSON.stringify(options)
+                });
+            } else {
+                console.log('no such poll');
+                db.close();
+                res.render('poll.jade', {});
+            }
+        });
+    });
+
+
+});
 
 app.post('/dashboard/newpoll', function (req, res) {
     var pollname = req.body.pollname;
@@ -123,19 +150,22 @@ app.post('/dashboard/newpoll', function (req, res) {
             if (item) {
                 db.close();
                 console.log("poll already exist");
-                res.redirect('/dashboard');
+                res.redirect('/poll/' + pollname);
             } else {
                 db.collection('polls').insertOne({
                     "username": username,
+                    "pollname": pollname,
                     "options": req.body
 
                 }, function (err, result) {
                     if (!err) {
                         console.log("poll added successfuly");
+                        db.close();
+                        console.log('db closed');
                     }
                 });
-                db.close();
-                res.redirect('/dashboard');
+
+                res.redirect('/poll/' + pollname);
             }
         });
     });
