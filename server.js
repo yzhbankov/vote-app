@@ -116,8 +116,6 @@ app.get('/dashboard/newpoll', function (req, res) {
 
 app.post('/dashboard/newpoll', function (req, res) {
     var pollname = req.body.pollname;
-    var option_1 = req.body.option_1;
-    var option_2 = req.body.option_2;
     var username = req.session.user;
 
     MongoClient.connect(url, function (err, db) {
@@ -129,11 +127,7 @@ app.post('/dashboard/newpoll', function (req, res) {
             } else {
                 db.collection('polls').insertOne({
                     "username": username,
-                    "pollname": pollname,
-                    "options": {
-                        option_1: {name: option_1, size: 0},
-                        option_2: {name: option_2, size: 0}
-                    }
+                    "options": req.body
 
                 }, function (err, result) {
                     if (!err) {
