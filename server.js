@@ -9,7 +9,8 @@ var url = 'mongodb://localhost:27017/vote_up';
 var session = require('express-session');
 
 
-app.use(express.static('public'));
+app.use("/", express.static('public'));
+app.use("/dashboard", express.static('public'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(session({secret: "secretword", resave: false, saveUninitialized: true}));
 app.set('views', __dirname + '/views');
@@ -109,7 +110,7 @@ app.get('/dashboard', function (req, res) {
 });
 
 app.get('/dashboard/newpoll', function (req, res) {
-    res.render('newpoll.jade', {});
+    res.render('newpoll.jade', {scripts: ['js/addOption.js']});
 });
 
 

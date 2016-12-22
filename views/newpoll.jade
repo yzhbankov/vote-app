@@ -3,6 +3,7 @@
 
 doctype html
 extends ./index.jade
+
 block append content
     div.container.signup
         h2 CREATE NEW POLL
@@ -12,11 +13,14 @@ block append content
                 input(type="text" name="pollname").form-control#user
             div.form-group
                 label(for="opt") Option_1:
-                input(type="text" name='option_1').form-control#pwd
+                input(type="text" name='option_1').form-control#user
             div.form-group
                 label(for="opt") Option_2:
-                input(type="text" name='option_2').form-control#pwd
-            div
-                button.btn.btn-default Add option
+                input(type="text" name='option_2').form-control#user
+
+            button.btn.btn-default.addoption(type="button") Add option
+            button.btn.btn-default.deleteoption(type="button") Delete option
 
             button.btn.btn-default(type="submit") Create Poll
+
+    script(src="js/addOption.js" type='text/javascript')
