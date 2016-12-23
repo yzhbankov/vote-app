@@ -38,11 +38,11 @@ module.exports = {
         return arrName;
     },
 
-    setSize: function setSize(obj, optionName, size) {
+    setSize: function setSize(obj, optionName) {
         var fields = Object.keys(obj);
         for (var i = 0; i < fields.length; i++) {
             if (obj[fields[i]].option_name == optionName) {
-                obj[fields[i]].size = size;
+                obj[fields[i]].size++;
             }
         }
         return obj;

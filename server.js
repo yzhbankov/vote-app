@@ -141,6 +141,27 @@ app.get('/poll/:pollname', function (req, res) {
 
 });
 
+app.post('/poll/:pollname', function (req, res) {
+
+    MongoClient.connect(url, function (err, db) {
+        db.collection('polls').findOne({"pollname": req.params.pollname}, function (err, item) {
+            var newoptions = dataTransorm.setSize(item.options, req.body.name);
+            db.collection('polls').update({"pollname": req.params.pollname},
+                {"$set": {"options": newoptions}}, function (err, doc) {
+                    var username = item.username;
+                    var options = newoptions;
+                    db.close();
+                    res.render('poll.jade', {
+                        title: req.params.pollname,
+                        username: username,
+                        optionsSize: dataTransorm.getSize(options),
+                        optionsName: dataTransorm.getName({})
+                    });
+                });
+        });
+    });
+});
+
 app.post('/dashboard/newpoll', function (req, res) {
     var pollname = req.body.pollname;
     var username = req.session.user;

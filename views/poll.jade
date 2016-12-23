@@ -10,10 +10,11 @@ block append content
       h2 Options size: #{optionsSize}
       h2 Options name: #{optionsName}
    div.options-submit
+   form(action="/poll/"+title method="POST")
       - if (optionsName.length)
         -for (var i = 0; i < optionsName.length; i++)
-         button.btn.btn-default.optionsBtn= optionsName[i]
+         button.btn.btn-default.optionsBtn(name="name" value=optionsName[i])= optionsName[i]
 
 
 
-   //script(src="js/addOption.js" type='text/javascript')
+   //script(src="js/pollOptions.js" type='text/javascript')
