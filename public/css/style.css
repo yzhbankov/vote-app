@@ -45,3 +45,12 @@ body {
     width: 400px;!important;
     height: 400px;!important;
 }
+.signbtn{
+    margin-top: 200px;
+    text-align: center;
+}
+.signbtn button{
+    font-size: 60px;
+    margin-left: 10px;
+    margin-right: 10px;
+}

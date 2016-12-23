@@ -207,6 +207,20 @@ app.get('/dashboard/polls', function (req, res) {
     });
 });
 
+app.get('/dashboard/mypolls', function (req, res) {
+    MongoClient.connect(url, function (err, db) {
+        var resent = db.collection('polls').find({"username":req.session.user}, {
+            'username': true,
+            "pollname": true,
+            'options': true
+        }).sort({_id: -1}).toArray(function (err, result) {
+            res.send(result);
+        });
+
+        db.close();
+    });
+});
+
 app.get('/logout', function (req, res) {
     req.session.destroy();
     console.log("session ends");
