@@ -5,6 +5,7 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var MongoClient = require('mongodb').MongoClient;
+var dataTransorm = require('./public/js/dataTransformation');
 var url = 'mongodb://localhost:27017/vote_up';
 var session = require('express-session');
 
@@ -119,8 +120,6 @@ app.get('/poll/:pollname', function (req, res) {
         console.log('db opened');
         db.collection('polls').findOne({"pollname": req.params.pollname}, function (err, item) {
             if (item) {
-                console.log('find');
-                console.log(req.params.pollname);
                 var username = item.username;
                 var pollname = item.pollname;
                 var options = item.options;
@@ -128,7 +127,8 @@ app.get('/poll/:pollname', function (req, res) {
                 res.render('poll.jade', {
                     title: req.params.pollname,
                     username: username,
-                    options: JSON.stringify(options)
+                    optionsSize: dataTransorm.getSize(options),
+                    optionsName: dataTransorm.getName(options)
                 });
             } else {
                 console.log('no such poll');
@@ -144,6 +144,7 @@ app.get('/poll/:pollname', function (req, res) {
 app.post('/dashboard/newpoll', function (req, res) {
     var pollname = req.body.pollname;
     var username = req.session.user;
+    var options = dataTransorm.setSizeOpt(req.body);
 
     MongoClient.connect(url, function (err, db) {
         db.collection('polls').findOne({"pollname": pollname}, function (err, item) {
@@ -155,7 +156,7 @@ app.post('/dashboard/newpoll', function (req, res) {
                 db.collection('polls').insertOne({
                     "username": username,
                     "pollname": pollname,
-                    "options": req.body
+                    "options": options
 
                 }, function (err, result) {
                     if (!err) {

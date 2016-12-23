@@ -7,7 +7,12 @@ block append content
    div.container.signup
       h2 Pollname: #{title}
       h2 Author: #{username}
-      h2 Options: #{options}
+      h2 Options size: #{optionsSize}
+      h2 Options name: #{optionsName}
+   div.options-submit
+      - if (optionsName.length)
+        -for (var i = 0; i < optionsName.length; i++)
+         button.btn.btn-default.optionsBtn= optionsName[i]
 
 
 
