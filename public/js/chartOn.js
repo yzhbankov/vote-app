@@ -2,9 +2,7 @@
  * Created by Iaroslav Zhbankov on 23.12.2016.
  */
 var ctx = document.getElementById("myChart").getContext("2d");
-ctx.canvas.width = 100;
-ctx.canvas.height = 100;
-alert(optionsName);
+
 var data = {
     labels: optionsName,
     datasets: [
