@@ -9,12 +9,15 @@ block append content
       h2 Author: #{username}
       h2 Options size: #{optionsSize}
       h2 Options name: #{optionsName}
+   canvas#myChart
    div.options-submit
    form(action="/poll/"+title method="POST")
       - if (optionsName.length)
         -for (var i = 0; i < optionsName.length; i++)
          button.btn.btn-default.optionsBtn(name="name" value=optionsName[i])= optionsName[i]
+   script.
+      var optionsSize = !{JSON.stringify(optionsSize)};
+      var optionsName = !{JSON.stringify(optionsName)};
 
-
-
-   //script(src="js/pollOptions.js" type='text/javascript')
+   script(src="js/Chart.js" type='text/javascript')
+   script(src="js/chartOn.js" type='text/javascript')

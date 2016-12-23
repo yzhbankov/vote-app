@@ -38,3 +38,7 @@ body {
 .signup-title {
     text-align: center;
 }
+#myChart{
+    width: 400px;!important;
+    height: 400px;!important;
+}

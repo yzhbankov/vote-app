@@ -19,6 +19,7 @@
   "homepage": "https://github.com/yzhbankov/vote-app#readme",
   "dependencies": {
     "body-parser": "^1.15.2",
+    "chart.js": "^2.4.0",
     "express": "^4.14.0",
     "express-session": "^1.14.2",
     "jade": "^1.11.0",
