@@ -19,7 +19,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
 app.get('/', function (req, res) {
-    res.render('index.jade', {});
+    res.render('layout.jade', {});
 });
 
 app.get('/signup', function (req, res) {
@@ -177,31 +177,34 @@ app.post('/dashboard/newpoll', function (req, res) {
     var pollname = req.body.pollname;
     var username = req.session.user;
     var options = dataTransorm.setSizeOpt(req.body);
+    if (!pollname || !username || !options) {
+        res.redirect('/dashboard/newpoll')
+    } else {
+        MongoClient.connect(url, function (err, db) {
+            db.collection('polls').findOne({"pollname": pollname}, function (err, item) {
+                if (item) {
+                    db.close();
+                    console.log("poll already exist");
+                    res.redirect('/poll/' + pollname);
+                } else {
+                    db.collection('polls').insertOne({
+                        "username": username,
+                        "pollname": pollname,
+                        "options": options
 
-    MongoClient.connect(url, function (err, db) {
-        db.collection('polls').findOne({"pollname": pollname}, function (err, item) {
-            if (item) {
-                db.close();
-                console.log("poll already exist");
-                res.redirect('/poll/' + pollname);
-            } else {
-                db.collection('polls').insertOne({
-                    "username": username,
-                    "pollname": pollname,
-                    "options": options
+                    }, function (err, result) {
+                        if (!err) {
+                            console.log("poll added successfuly");
+                            db.close();
+                            console.log('db closed');
+                        }
+                    });
 
-                }, function (err, result) {
-                    if (!err) {
-                        console.log("poll added successfuly");
-                        db.close();
-                        console.log('db closed');
-                    }
-                });
-
-                res.redirect('/poll/' + pollname);
-            }
+                    res.redirect('/poll/' + pollname);
+                }
+            });
         });
-    });
+    }
 });
 
 app.get('/dashboard/polls', function (req, res) {

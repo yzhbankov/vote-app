@@ -18,6 +18,7 @@ html
     integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous")
     title Vote_up
 body
+
     div.menu
         nav.navbar.navbar-inverse.navbar-fixed-top
             div.container
@@ -28,10 +29,10 @@ body
                     span.icon-bar
                 a(href="/").navbar-brand
                     strong Home
-                a(href="/dashboard").navbar-brand
-                    strong Dashboard
                 div.collapse.navbar-collapse
                     ul.nav.navbar-nav.navbar-right
+                        li.signup-btn
+                            a(href="/dashboard") Dashboard
                         li.signup-btn
                             a(href="/signup") Sign up
                         li.logint-btn
@@ -43,7 +44,6 @@ body
 div.board
     div.title VOTE up
     div discover the truth
-
 block content
 
 div.footer
