@@ -6,7 +6,9 @@ var app = express();
 var bodyParser = require('body-parser');
 var MongoClient = require('mongodb').MongoClient;
 var dataTransorm = require('./public/js/dataTransformation');
-var url = 'mongodb://localhost:27017/vote_up';
+var url = 'mongodb://yzhbankov:password1360@ds145208.mlab.com:45208/heroku_8k6sbvf2';
+
+//var url = 'mongodb://localhost:27017/vote_up';
 var session = require('express-session');
 
 
