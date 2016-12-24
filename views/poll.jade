@@ -10,7 +10,7 @@ block append content
       canvas#myChart
    div.options-submit
       div
-         a(href="localhost:3000/poll/"+title) localhost:3000/poll/ #{title}
+         a(href="https://votemeup.herokuapp.com/poll/"+title) https://votemeup.herokuapp.com/poll/ #{title}
       form(action="/poll/"+title method="POST")
          - if (optionsName.length)
            -for (var i = 0; i < optionsName.length; i++)
