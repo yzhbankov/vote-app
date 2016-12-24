@@ -12,3 +12,5 @@ block append content
          -for (var i = 0; i < polls.length; i++)
             div
                a(href="/poll/" + polls[i]).btn.btn-default= polls[i]
+               a(href="/poll/delete/"+polls[i])
+                  button.btn.btn-default Delete

@@ -162,6 +162,17 @@ app.post('/poll/:pollname', function (req, res) {
     });
 });
 
+app.get('/poll/delete/:pollname', function (req, res) {
+    if (!req.session.user) {
+        res.redirect('/dashboard');
+    }
+    MongoClient.connect(url, function (err, db) {
+        db.collection('polls').remove({"pollname": req.params.pollname});
+        db.close();
+        res.redirect('/dashboard/mypolls');
+    });
+});
+
 app.post('/dashboard/newpoll', function (req, res) {
     var pollname = req.body.pollname;
     var username = req.session.user;
@@ -201,10 +212,10 @@ app.get('/dashboard/polls', function (req, res) {
             'options': true
         }).toArray(function (err, result) {
             var polls = [];
-            for (var i = 0; i < result.length; i++){
+            for (var i = 0; i < result.length; i++) {
                 polls.push(result[i].pollname);
             }
-            res.render('polls.jade', {"title": "All users", "polls":polls});
+            res.render('allpolls.jade', {"title": "All users", "polls": polls});
         });
 
         db.close();
@@ -213,16 +224,20 @@ app.get('/dashboard/polls', function (req, res) {
 
 app.get('/dashboard/mypolls', function (req, res) {
     MongoClient.connect(url, function (err, db) {
-        var resent = db.collection('polls').find({"username":req.session.user}, {
+        var resent = db.collection('polls').find({"username": req.session.user}, {
             'username': true,
             "pollname": true,
             'options': true
         }).toArray(function (err, result) {
-            var polls = [];
-            for (var i = 0; i < result.length; i++){
-                polls.push(result[i].pollname);
+            if (result.length < 1) {
+                res.render('polls.jade', {"title": "User has no polls", "polls": []});
+            } else {
+                var polls = [];
+                for (var i = 0; i < result.length; i++) {
+                    polls.push(result[i].pollname);
+                }
+                res.render('polls.jade', {"title": result[0].username, "polls": polls});
             }
-            res.render('polls.jade', {"title": result[0].username, "polls":polls});
         });
 
         db.close();
