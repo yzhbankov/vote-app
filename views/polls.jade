@@ -1,0 +1,14 @@
+//
+   Created by Владелец on 24.12.2016.
+
+doctype html
+extends ./index.jade
+block append content
+   div.container.signup
+      h2 User: #{title}
+      //h2 Polls: #{polls}
+   div.options-submit
+         - if (polls.length)
+         -for (var i = 0; i < polls.length; i++)
+            div
+               a(href="/poll/" + polls[i]).btn.btn-default= polls[i]

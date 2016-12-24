@@ -103,7 +103,7 @@ app.post('/settings', function (req, res) {
 
 app.get('/dashboard', function (req, res) {
     if (!req.session.user) {
-        res.redirect("/");
+        res.redirect("/signin");
         console.log("no such session")
     } else {
         console.log("current session");
@@ -199,8 +199,12 @@ app.get('/dashboard/polls', function (req, res) {
             'username': true,
             "pollname": true,
             'options': true
-        }).sort({_id: -1}).toArray(function (err, result) {
-            res.send(result);
+        }).toArray(function (err, result) {
+            var polls = [];
+            for (var i = 0; i < result.length; i++){
+                polls.push(result[i].pollname);
+            }
+            res.render('polls.jade', {"title": "All users", "polls":polls});
         });
 
         db.close();
@@ -213,8 +217,12 @@ app.get('/dashboard/mypolls', function (req, res) {
             'username': true,
             "pollname": true,
             'options': true
-        }).sort({_id: -1}).toArray(function (err, result) {
-            res.send(result);
+        }).toArray(function (err, result) {
+            var polls = [];
+            for (var i = 0; i < result.length; i++){
+                polls.push(result[i].pollname);
+            }
+            res.render('polls.jade', {"title": result[0].username, "polls":polls});
         });
 
         db.close();
